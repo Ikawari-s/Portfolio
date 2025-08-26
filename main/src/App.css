@@ -1,10 +1,8 @@
-/* App.css */
-
-/* Reset and base */
 body, html, #root {
   margin: 0;
   padding: 0;
   scroll-behavior: smooth;
+  background-color: #282c34;
 }
 
 .App {
@@ -82,20 +80,30 @@ body, html, #root {
 /* Section styling */
 .section {
   scroll-snap-align: start;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
+  height: 100vh;
   font-size: 3rem;
   padding: 20px;
   box-sizing: border-box;
   text-align: center;
 }
 
+.section0.circle-shape {
+  border-radius: 0 0 100rem 100rem;
+  margin: 50px auto;
+  background-color: rgb(241, 251, 97);
+  transition: all 0.5s ease-in-out;
+  overflow: hidden;
+}
+
+
 .section1 {
-  background-color: #282c34;
+  background-color: #ffffff;
+  color: rgb(241, 251, 97);;
 }
 
 .section2 {
@@ -174,4 +182,21 @@ body, html, #root {
 .slide-out {
   transform: translateX(100%);
   opacity: 0;
+}
+
+.custom-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 30px;
+  height: 30px;
+  background-color: rgba(241, 251, 97, 0.5);
+  border-radius: 50%;
+  pointer-events: none;
+  transform: translate3d(0, 0, 0);
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  z-index: 9999;
+  backdrop-filter: blur(2px);
+  margin-left: -10px;
+  margin-top: -10px;
 }

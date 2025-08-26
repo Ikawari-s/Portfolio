@@ -1,0 +1,48 @@
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: rgb(241, 251, 97);;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  color: white;
+  font-size: 2rem;
+  font-weight: bold;
+  animation-fill-mode: forwards;
+  transform-origin: center center;
+}
+
+.loading-screen.loaded {
+  animation: clipCircleCollapseOut 1.2s cubic-bezier(0.68, -0.55, 0.27, 1.55) forwards;
+  pointer-events: none;
+}
+
+
+.loading-text {
+  font-size: 24px;
+  font-weight: bold;
+  color: white;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.7));
+}
+
+
+@keyframes clipCircleCollapseOut {
+  0% {
+    clip-path: circle(150% at 50% 50%);
+    opacity: 1;
+  }
+  60% {
+    clip-path: circle(30% at 50% 50%);
+    opacity: 1;
+  }
+  80% {
+    clip-path: circle(10% at 50% 50%);
+    opacity: 1;
+  }
+  100% {
+    clip-path: circle(0% at 50% 50%);
+    opacity: 0;
+  }
+}
+

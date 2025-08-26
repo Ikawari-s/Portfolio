@@ -1,6 +1,10 @@
-import logo from './logo.svg';
 import './App.css';
 import { useRef, useEffect, useState } from 'react';
+import LoadingScreen from './LoadingScreen'
+import Section1 from './Section1';
+import Section2 from './Section2';
+import Section3 from './Section3';
+import Section4 from './Section4';
 
 // Custom hook for visibility detection using Intersection Observer
 function useVisibilityObserver(ref, threshold = 0.5) {
@@ -30,11 +34,11 @@ function App() {
   const section3Ref = useRef(null);
   const section4Ref = useRef(null);
   const scrollContainerRef = useRef(null);
+  const cursorRef = useRef(null);
 
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [currentSection, setCurrentSection] = useState('section1');
 
-  // Use custom hook for each section's visibility
   const section1Visible = useVisibilityObserver(section1Ref);
   const section2Visible = useVisibilityObserver(section2Ref);
   const section3Visible = useVisibilityObserver(section3Ref);
@@ -48,6 +52,35 @@ function App() {
   useEffect(() => {
     const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
     setIsTouchDevice(hasTouch);
+  }, []);
+
+  useEffect(() => {
+    const cursor = cursorRef.current;
+    if (!cursor) return;
+
+    let mouseX = 0,
+      mouseY = 0,
+      posX = 0,
+      posY = 0;
+
+    const updateCursor = () => {
+      posX += (mouseX - posX) * 0.5;
+      posY += (mouseY - posY) * 0.5;
+      cursor.style.transform = `translate3d(${posX}px, ${posY}px, 0)`;
+      requestAnimationFrame(updateCursor);
+    };
+
+    const handleMouseMove = (e) => {
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    };
+
+    document.addEventListener('mousemove', handleMouseMove);
+    updateCursor();
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+    };
   }, []);
 
   const handleSelectChange = (e) => {
@@ -74,6 +107,11 @@ function App() {
 
   return (
     <div className="App">
+      <div>
+      <LoadingScreen />
+      {/* Your main content goes here */}
+      </div>
+      <div className="custom-cursor" ref={cursorRef}></div>
       <nav className="nav">
         <div className="nav-buttons">
           <button onClick={() => scrollToSection(section1Ref, 'section1')}>Section 1</button>
@@ -82,7 +120,6 @@ function App() {
           <button onClick={() => scrollToSection(section4Ref, 'section4')}>Section 4</button>
         </div>
 
-        {/* Mobile dropdown */}
         <select
           className="nav-dropdown"
           value={currentSection}
@@ -100,30 +137,18 @@ function App() {
         ref={scrollContainerRef}
         className={`scroll-container ${isTouchDevice ? 'snap-enabled' : ''}`}
       >
-        <section ref={section1Ref} className="section section1">
-          <div className={section1Visible ? 'slide-in' : 'slide-out'}>
-            <h1>Section 1</h1>
-            <img src={logo} className="App-logo" alt="logo" />
-          </div>
-        </section>
-
-        <section ref={section2Ref} className="section section2">
-          <div className={section2Visible ? 'slide-in' : 'slide-out'}>
-            <h1>Section 2</h1>
-          </div>
-        </section>
-
-        <section ref={section3Ref} className="section section3">
-          <div className={section3Visible ? 'slide-in' : 'slide-out'}>
-            <h1>Section 3</h1>
-          </div>
-        </section>
-
-        <section ref={section4Ref} className="section section4">
-          <div className={section4Visible ? 'slide-in' : 'slide-out'}>
-            <h1>Section 4</h1>
-          </div>
-        </section>
+        <div ref={section1Ref}>
+          <Section1 isVisible={section1Visible} />
+        </div>
+        <div ref={section2Ref}>
+          <Section2 isVisible={section2Visible} />
+        </div>
+        <div ref={section3Ref}>
+          <Section3 isVisible={section3Visible} />
+        </div>
+        <div ref={section4Ref}>
+          <Section4 isVisible={section4Visible} />
+        </div>
       </div>
     </div>
   );
