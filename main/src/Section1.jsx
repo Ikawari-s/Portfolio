@@ -6,7 +6,6 @@ function Section1({ isVisible }) {
     <section className="section section1">
       <div className={isVisible ? 'slide-in' : 'slide-out'}>
         <h1>Section 1</h1>
-        <img src={logo} className="App-logo" alt="logo" />
       </div>
     </section>
   );

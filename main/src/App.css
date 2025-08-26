@@ -46,7 +46,6 @@ body, html, #root {
   background-color: #21a1f1;
 }
 
-/* Dropdown nav - hidden by default */
 .nav-dropdown {
   display: none;
   font-size: 1rem;
@@ -66,18 +65,15 @@ body, html, #root {
   outline: none;
 }
 
-/* Scroll container - default no snap */
 .scroll-container {
   height: 100vh;
   overflow-y: scroll;
 }
 
-/* Enable scroll snapping only when the class is present */
 .scroll-container.snap-enabled {
   scroll-snap-type: y mandatory;
 }
 
-/* Section styling */
 .section {
   scroll-snap-align: start;
   display: flex;
@@ -90,20 +86,14 @@ body, html, #root {
   padding: 20px;
   box-sizing: border-box;
   text-align: center;
+  overflow: hidden !important;
 }
-
-.section0.circle-shape {
-  border-radius: 0 0 100rem 100rem;
-  margin: 50px auto;
-  background-color: rgb(241, 251, 97);
-  transition: all 0.5s ease-in-out;
-  overflow: hidden;
-}
-
 
 .section1 {
-  background-color: #ffffff;
-  color: rgb(241, 251, 97);;
+  background-color: #0F1626;
+  color: #FF533D;
+  text-align: left;
+  font-size: 10rem;
 }
 
 .section2 {
@@ -149,6 +139,10 @@ body, html, #root {
   .App-logo {
     height: 40vmin;
   }
+
+  .custom-cursor{
+    display: none;
+  }
 }
 
 /* Small devices (mobile phones) */
@@ -167,6 +161,10 @@ body, html, #root {
 
   .App-logo {
     height: 50vmin;
+  }
+
+  .custom-cursor{
+    display: none;
   }
 }
 /* Add transition for the sliding text */
