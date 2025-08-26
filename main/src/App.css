@@ -13,7 +13,7 @@ body, html, #root {
 /* Navigation styles */
 .nav {
   position: fixed;
-  top: 0;
+  bottom: 0;
   width: 100%;
   background-color: #282c34;
   padding: 10px;
