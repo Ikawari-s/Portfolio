@@ -1,13 +1,12 @@
 import './App.css';
 import { useRef, useEffect, useState } from 'react';
-import Lenis from '@studio-freight/lenis';
-import LoadingScreen from './LoadingScreen';
+import LoadingScreen from './LoadingScreen'
 import Section1 from './Section1';
 import Section2 from './Section2';
 import Section3 from './Section3';
 import Section4 from './Section4';
 
-// Hook to detect section visibility
+// Custom hook for visibility detection using Intersection Observer
 function useVisibilityObserver(ref, threshold = 0.5) {
   const [isVisible, setIsVisible] = useState(false);
 
@@ -21,7 +20,9 @@ function useVisibilityObserver(ref, threshold = 0.5) {
 
     observer.observe(ref.current);
 
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+    };
   }, [ref, threshold]);
 
   return isVisible;
@@ -32,8 +33,8 @@ function App() {
   const section2Ref = useRef(null);
   const section3Ref = useRef(null);
   const section4Ref = useRef(null);
+  const scrollContainerRef = useRef(null);
   const cursorRef = useRef(null);
-  const lenisRef = useRef(null);
 
   const [isTouchDevice, setIsTouchDevice] = useState(false);
   const [currentSection, setCurrentSection] = useState('section1');
@@ -43,52 +44,24 @@ function App() {
   const section3Visible = useVisibilityObserver(section3Ref);
   const section4Visible = useVisibilityObserver(section4Ref);
 
-  // Detect touch device and conditionally setup Lenis
-  useEffect(() => {
-    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
-    setIsTouchDevice(hasTouch);
-
-    if (hasTouch) return;
-
-    const lenis = new Lenis({
-      duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      smooth: true,
-      direction: 'vertical',
-      gestureDirection: 'vertical',
-      smoothTouch: false,
-      touchMultiplier: 2,
-      infinite: false,
-    });
-
-    lenisRef.current = lenis;
-
-    const raf = (time) => {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
-
-    requestAnimationFrame(raf);
-
-    return () => lenis.destroy();
-  }, []);
-
-  // Scroll to section
   const scrollToSection = (ref, sectionName) => {
-    if (lenisRef.current && ref.current && !isTouchDevice) {
-      lenisRef.current.scrollTo(ref.current);
-    } else {
-      ref.current?.scrollIntoView({ behavior: 'smooth' });
-    }
+    ref.current?.scrollIntoView({ behavior: 'smooth' });
     setCurrentSection(sectionName);
   };
 
-  // Custom cursor
+  useEffect(() => {
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    setIsTouchDevice(hasTouch);
+  }, []);
+
   useEffect(() => {
     const cursor = cursorRef.current;
     if (!cursor) return;
 
-    let mouseX = 0, mouseY = 0, posX = 0, posY = 0;
+    let mouseX = 0,
+      mouseY = 0,
+      posX = 0,
+      posY = 0;
 
     const updateCursor = () => {
       posX += (mouseX - posX) * 0.5;
@@ -134,10 +107,11 @@ function App() {
 
   return (
     <div className="App">
+      <div>
       <LoadingScreen />
-
+      {/* Your main content goes here */}
+      </div>
       <div className="custom-cursor" ref={cursorRef}></div>
-
       <nav className="nav">
         <div className="nav-buttons">
           <button onClick={() => scrollToSection(section1Ref, 'section1')}>Section 1</button>
@@ -159,7 +133,10 @@ function App() {
         </select>
       </nav>
 
-      <div className={`scroll-container ${isTouchDevice ? 'snap-enabled' : ''}`}>
+      <div
+        ref={scrollContainerRef}
+        className={`scroll-container ${isTouchDevice ? 'snap-enabled' : ''}`}
+      >
         <div ref={section1Ref}>
           <Section1 isVisible={section1Visible} />
         </div>

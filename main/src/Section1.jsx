@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 
 function Section1({ isVisible }) {
   return (
